@@ -1,0 +1,23 @@
+# Multi-container application
+services:
+
+  # Where php-fpm is
+  application:
+    build: .
+    container_name: application
+    # Mirroring the project inside the container
+    volumes:
+      - ./:/var/www
+
+  # The Nginx server
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    # Outside port : Inside port
+    ports:
+      - "8080:8000"
+    volumes:
+      # Adding the nginx conf file
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      # And the project files have to exist here too
+      - ./:/var/www
